@@ -1,11 +1,14 @@
 
 
-{% set n_items 3 %}
+{{ config(materialized='table') }}
 
-with top_n as (
+{% set n_items 10 %}
+{% set n_key_regions 5 %}
+
+with top_n_dollar_value_items as (
     select 
         lineitem.l_partkey qualified_keys,
-        sum(lineitem.l_quantity) as total
+        sum(lineitem.l_extendedprice) as total
         from {{ ref('tpch_lineitem') }} as lineitem
         group by lineitem.l_partkey
         order by sum(lineitem.l_quantity) desc
@@ -16,8 +19,8 @@ with top_n as (
         region.r_name as Location,
         part.p_partkey as PartID,
         part.p_name as PartName,
-        coalesce(sum(lineitem.l_quantity),0) as TotalCount
-    
+        coalesce(sum(lineitem.l_quantity),0) as TotalCount,
+        coalesce(sum(lineitem.l_extendedprice),0) as ExtendedPrice    
     from 
         {{ ref('tpch_lineitem') }} as lineitem
         left join 
@@ -41,11 +44,14 @@ with top_n as (
         on
         nation.n_regionkey = region.r_regionkey
     where 
-        part.p_partkey in (select qualified_keys from top_n)
+        part.p_partkey in (select qualified_keys from top_n_dollar_value_items)
     group by 
         region.r_name,
         part.p_partkey,
         part.p_name
+
+
+
     
 
 /*
