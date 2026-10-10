@@ -2,8 +2,8 @@
 
 {{ config(materialized='table') }}
 
-{% set n_items 10 %}
-{% set n_key_regions 5 %}
+{% set n_items = 10 %}
+{% set n_key_regions = 5 %}
 
 with top_n_dollar_value_items as (
     select 

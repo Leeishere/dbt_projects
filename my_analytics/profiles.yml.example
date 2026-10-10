@@ -1,0 +1,11 @@
+my_analytics:
+  outputs:
+    dev:
+      catalog: main
+      host: <your-workspace>.cloud.databricks.com
+      http_path: /sql/1.0/warehouses/<warehouse-id>
+      schema: dbt_demo
+      threads: 1
+      token: "{{ env_var('DBT_TOKEN') }}"
+      type: databricks
+  target: dev

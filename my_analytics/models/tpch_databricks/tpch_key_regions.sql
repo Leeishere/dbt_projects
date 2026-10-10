@@ -1,7 +1,7 @@
 
 {{ config(materialized='view') }}
 
-{% set n_key_regions 5 %}
+{% set n_key_regions = 5 %}
 
 
 select 
