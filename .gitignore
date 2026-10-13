@@ -11,3 +11,4 @@ scratch.ipynb
 /my_analytics/README.md
 /my_analytics/models/example/
 /my_analytics/.user.yml
+/my_analytics/snapshots/tpch_top_performing_items_snapshot.sql
