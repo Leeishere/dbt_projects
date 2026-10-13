@@ -178,3 +178,34 @@ sources:
           - name: ps_comment
             description: "Free-text comment."
 
+models:
+  - name: tpch_top_performing_items
+    columns:
+      - name: Location
+        data_tests:
+          - not_null
+      - name: PartID
+        data_tests:
+          - not_null
+      - name: PartName
+        data_tests:
+          - not_null
+      - name: TotalCount
+        data_tests:
+          - not_null
+      - name: ExtendedPrice
+        data_tests:
+          - not_null
+
+  - name: tpch_key_regions
+    columns:
+      - name: Location
+        data_tests:
+          - not_null
+          - unique
+      - name: TotalTopItems
+        data_tests:
+          - not_null
+      - name: ExtendedPrice
+        data_tests:
+          - not_null
