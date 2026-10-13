@@ -11,10 +11,10 @@ with top_n_dollar_value_items as (
         sum(lineitem.l_extendedprice) as total
         from {{ ref('tpch_lineitem') }} as lineitem
         group by lineitem.l_partkey
-        order by sum(lineitem.l_quantity) desc
+        order by sum(lineitem.l_extendedprice) desc
         limit {{ n_items }}
-),
-breakout as(
+)
+
 
     select 
         region.r_name as Location,
@@ -51,12 +51,4 @@ breakout as(
         region.r_name,
         part.p_partkey,
         part.p_name
-)
-select
-    *,
-    rank() over (partition by Location, PartID order by ExtendedPrice) as PriceRank,
-    rank() over (partition by Location, PartID order by TotalCount) as CountRank
-from
-    breakout
-order by
-    PriceRank desc, CountRank desc
+
