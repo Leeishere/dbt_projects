@@ -2,6 +2,9 @@
 logs/
 target/
 dbt_packages/
+/predict_car_sales/*
+!/predict_car_sales/rate_to_carsales_predictor.ipynb
+!/predict_car_sales/ridge_model_builder.ipynb
 __pycache__/
 .ipynb_checkpoints/
 profiles.yml
