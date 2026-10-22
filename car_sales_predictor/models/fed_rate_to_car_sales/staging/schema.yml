@@ -1,0 +1,29 @@
+
+version: 2
+
+models:
+  - name: effective_rate_fed_rates
+    description: Cleaned and forward filled federal funds effective rates.
+    columns:
+      - name: observation_date
+        description: Date of the rate observation.
+        data_tests:
+          - not_null
+          - unique
+      - name: effective_rate
+        description: forward filled non nan rate
+        data_tests:
+          - not_null
+
+  - name: four_year_fed_rates
+    description: Cleaned and un-filled federal funds effective rates.
+    columns:
+      - name: observation_date
+        description: Date of the rate observation.
+        data_tests:
+          - not_null
+          - unique
+      - name: four_year_installment
+        description: raw value
+        data_tests:
+          - not_null

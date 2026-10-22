@@ -1,0 +1,9 @@
+version: 2
+sources:
+  - name: fed_rate_data
+    schema: public
+    tables:
+      - name: four_year_installment
+        description: Finance Rate on Consumer Installment Loans at Commercial Banks, New Autos 48 Month Loan
+      - name: effective_rate
+        description: Federal Funds Effective Rate

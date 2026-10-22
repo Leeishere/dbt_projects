@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: base_data_fed_rates
+    description: unfilled four year rates; filled effective rates.
+    columns:
+      - name: observation_date
+        description: Date of the rate observation.
+        data_tests:
+          - not_null
+          - unique
+      - name: effective_rate
+        description: forward filled non-null rate
+        data_tests:
+          - not_null
+      - name: four_year_installment
+        description: non filled four year value
