@@ -24,7 +24,7 @@ profiles.yml
 .env
 scratch.ipynb
 /syntax.md
-/my_analytics/README.md
-/my_analytics/models/example/
+/my_dbt_projects/top_regions/README.md
+/my_dbt_projects/top_regions/models/example/
 .user.yml
-/my_analytics/snapshots/tpch_top_performing_items_snapshot.sql
+/my_dbt_projects/top_regions/snapshots/tpch_top_performing_items_snapshot.sql

@@ -111,7 +111,7 @@ with DAG(
     dbt_task = BashOperator(
         task_id="run_dbt_models",
         bash_command=(
-            'cd "$HOME/Projects/dbt_projects/car_sales_predictor" && '
+            'cd "$HOME/Projects/dbt_projects/my_dbt_projects/car_sales_predictor" && '
             'dbt run --select '
             'effective_rate_fed_rates four_year_fed_rates base_data_fed_rates'
         ),

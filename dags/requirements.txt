@@ -1,0 +1,7 @@
+# Install with the Airflow constraints file, e.g.:
+# pip install -r requirements.txt \
+#   --constraint https://raw.githubusercontent.com/apache/airflow/constraints-2.6.3/constraints-3.10.txt
+apache-airflow==2.6.3
+apache-airflow-providers-postgres
+psycopg2-binary
+requests
