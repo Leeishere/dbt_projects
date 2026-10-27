@@ -100,8 +100,9 @@ with DAG(
     start_date=datetime.combine(SCHEDULE_START_DATE, time.min),
     schedule_interval="@monthly",
     default_args=default_args,
-    catchup=False,
+    catchup=True,                 ###  < ------------- FOR TESTING
     max_active_runs=1,
+    is_paused_upon_creation=True  ###  < ------------- PAUSED FOR TESTING
 ) as dag:
     fetch_task = PythonOperator(
         task_id="fetch_fed_rates_data",
@@ -111,9 +112,9 @@ with DAG(
     dbt_task = BashOperator(
         task_id="run_dbt_models",
         bash_command=(
-            'cd "$HOME/Projects/dbt_projects/my_dbt_projects/car_sales_predictor" && '
+            'cd "$HOME/Projects/dbt_projects/dbt-venv/bin/dbt" && '
             'dbt run --select '
-            'effective_rate_fed_rates four_year_fed_rates base_data_fed_rates'
+            'my_dbt_projects/car_sales_predictor/effective_rate_fed_rates my_dbt_projects/car_sales_predictor/four_year_fed_rates my_dbt_projects/car_sales_predictor/base_data_fed_rates'
         ),
     )
     fetch_task.set_downstream(dbt_task)
