@@ -6,5 +6,5 @@ select
 from
     {{ source('fed_rate_data', 'four_year_installment') }}
 
-where four_year_installment is not null
-;
+where 
+    four_year_installment is not null

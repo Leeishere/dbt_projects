@@ -112,9 +112,9 @@ with DAG(
     dbt_task = BashOperator(
         task_id="run_dbt_models",
         bash_command=(
-            'cd "$HOME/Projects/dbt_projects/dbt-venv/bin/dbt" && '
-            'dbt run --select '
-            'my_dbt_projects/car_sales_predictor/effective_rate_fed_rates my_dbt_projects/car_sales_predictor/four_year_fed_rates my_dbt_projects/car_sales_predictor/base_data_fed_rates'
-        ),
+    'cd "$HOME/Projects/dbt_projects/my_dbt_projects/car_sales_predictor" && '
+    '"$HOME/Projects/dbt_projects/.venv-dbt/bin/dbt" run --select '
+    'effective_rate_fed_rates four_year_fed_rates base_data_fed_rates'
+),
     )
     fetch_task.set_downstream(dbt_task)

@@ -52,6 +52,9 @@ forward_filled as(
     and 
         ff_step_two.ranked_by_date = 1
 )
-select * from forward_filled where effective_rate is not null
-        
-  ;
+select 
+    * 
+from 
+    forward_filled 
+where 
+    effective_rate is not null
