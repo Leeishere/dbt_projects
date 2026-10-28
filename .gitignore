@@ -5,7 +5,10 @@ logs/
 target/
 dbt_packages/
 /data_files/
-/visualizations/
+/visualizations/*
+!/visualizations/car_sales_vizzes/
+/visualizations/car_sales_vizzes/*
+!/visualizations/car_sales_vizzes/fed_rates_line_plots.ipynb
 /predict_car_sales/*
 !/predict_car_sales/rate_to_carsales_predictor.ipynb
 !/predict_car_sales/ridge_model_builder.ipynb
