@@ -432,14 +432,31 @@ def get_table_max_dates(
 
     return table_max_dates
 
+def subtract_months(value: date, months: int) -> date:
+    total = value.year * 12 + (value.month - 1) - months
+    return date(total // 12, total % 12 + 1, 1)
 
 def get_start_date(
     database_dates: dict[str, date | None],
     input_date: str,
+    max_period: int | None = None, 
 ) -> date:
-    """Start at the default or the least-advanced populated table, inclusive."""
+    """Return the first-of-month date to start the API fetch from, inclusive.
+
+    - If no table has data, return the month of input_date (the default).
+    - Otherwise return the month of the oldest of the tables' latest dates,
+      so the least-advanced table is caught up. input_date is ignored here.
+    - If some tables are empty, step back a further max_period + 1 months
+      from that month so periodic (e.g. quarterly) data is fully refetched.
+
+    max_period is the longest source period in months (3 for quarterly,
+    12 for yearly); None defaults to 3, the longest period in the current
+    FRED series.
+    """
+    if max_period is None:
+        max_period = 3  
     default_month = first_day_of_month(date.fromisoformat(input_date))
-    if not database_dates or any(
+    if not database_dates or all(
         value is None for value in database_dates.values()
     ):
         return default_month
@@ -447,7 +464,11 @@ def get_start_date(
     populated_dates = [value for value in database_dates.values() if value]
     earliest_table_max = min(populated_dates)
     earliest_table_month = first_day_of_month(earliest_table_max)
-    return max(default_month, earliest_table_month)
+    if any(
+        value is None for value in database_dates.values()
+    ):
+        earliest_table_month = subtract_months(earliest_table_month, max_period+1)
+    return earliest_table_month
 
 
 def determine_api_call_start_date(
@@ -455,6 +476,7 @@ def determine_api_call_start_date(
     default_date: str,
     table_names: list[str],
     date_cols_for_table_names: dict[str, str],
+    max_period: int | None = None, # max period in months such as 3 for fiscal quarter
 ) -> date:
     table_max_dates = get_table_max_dates(
         pg_db_params=pg_df_params,
@@ -464,6 +486,7 @@ def determine_api_call_start_date(
     return get_start_date(
         database_dates=table_max_dates,
         input_date=default_date,
+        max_period=max_period
     )
 
 ######################################

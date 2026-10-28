@@ -68,11 +68,12 @@ def fetch_fed_rates_data() -> int:
         ],
         new_freq="m",
     )
-    observation_start = determine_api_call_start_date(
+    observation_start = determine_api_call_start_date(   # default date is used only when no table has data; otherwise start follows the existing data
         pg_df_params=postgres_params,
         default_date=DEFAULT_OBSERVATION_START,
         table_names=TABLE_NAMES,
         date_cols_for_table_names=DATE_COLUMNS,
+        max_period=3, # enter number of months such as 3 for fiscal quarters in api data. 
     )
     api_params = dicts_of_params(
         keys_list=list(series_ids),
