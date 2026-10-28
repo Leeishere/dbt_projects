@@ -11,6 +11,7 @@ from dag_utils import (
     first_day_of_month,
     import_multi_table_import_data,
     make_sql_db_params,
+    subtract_months,
     update_frequencies,
 )
 
@@ -23,12 +24,12 @@ def _required_env(name: str) -> str:
     return value
 
 
-DEFAULT_OBSERVATION_START = _required_env(
-    "FRED_DEFAULT_OBSERVATION_START"
+HISTORY_YEARS = 4
+# First of the month exactly HISTORY_YEARS years before the current month.
+SCHEDULE_START_DATE = subtract_months(
+    first_day_of_month(date.today()), HISTORY_YEARS * 12
 )
-SCHEDULE_START_DATE = first_day_of_month(
-    date.fromisoformat(DEFAULT_OBSERVATION_START)
-)
+DEFAULT_OBSERVATION_START = SCHEDULE_START_DATE.isoformat()
 TABLE_NAMES = ["four_year_installment", "effective_rate"]
 DATE_COLUMNS = {
     table_name: "observation_date"
@@ -101,9 +102,9 @@ with DAG(
     start_date=datetime.combine(SCHEDULE_START_DATE, time.min),
     schedule_interval="@monthly",
     default_args=default_args,
-    catchup=True,                 ###  < ------------- FOR TESTING
+    catchup=False,                
     max_active_runs=1,
-    is_paused_upon_creation=True  ###  < ------------- PAUSED FOR TESTING
+    is_paused_upon_creation=False
 ) as dag:
     fetch_task = PythonOperator(
         task_id="fetch_fed_rates_data",

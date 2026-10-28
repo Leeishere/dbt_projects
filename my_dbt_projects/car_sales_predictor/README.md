@@ -10,20 +10,25 @@ Try running the following commands:
 
 Configure these environment variables for the Airflow scheduler and worker:
 
-- `FRED_DEFAULT_OBSERVATION_START`: ISO date used when a source table is
-  missing or has no observations, and as the stable Airflow schedule anchor.
 - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`, and
   `POSTGRES_HOST`: PostgreSQL connection settings.
 - `FRED_API_KEY` and `FRED_URL`: FRED API credentials and endpoint.
 - `FOUR_YEAR_INSTALLMENT` and `EFFECTIVE_RATE`: FRED series identifiers.
 
-At task runtime, the fetch watermark is recomputed using the lesser of the
-latest observation dates in the two source tables (or the configured default
-if either table has no observations). The selected month is included in each
-fetch so late or revised observations can be upserted. Source dates are
-normalized to the first of their month; a database check enforces that date
-shape, and a unique index plus upsert ensures one row per month per source
-table.
+The default start date is not configured by an environment variable. The DAG
+computes it as the first day of the month exactly four years before the
+current month (`HISTORY_YEARS` in `dags/fed_rates_to_features_pipeline.py`),
+and uses it as both the Airflow schedule start and the fetch default.
+
+At task runtime, the fetch start month is recomputed from the existing data.
+If neither source table has data, the computed default is used. If both do,
+the fetch starts at the month of the older table's latest observation. If only
+one has data, it starts that table's latest month minus `max_period + 1`
+months (`max_period` is 3 for the quarterly series). The start month is
+included in each fetch so late or revised observations can be upserted. Source
+dates are normalized to the first of their month; a database check enforces
+that date shape, and a unique index plus upsert ensures one row per month per
+source table.
 
 
 ### Resources:
