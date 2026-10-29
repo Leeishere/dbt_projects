@@ -102,7 +102,7 @@ with DAG(
     start_date=datetime.combine(SCHEDULE_START_DATE, time.min),
     schedule_interval="@monthly",
     default_args=default_args,
-    catchup=False,                
+    catchup=True,                
     max_active_runs=1,
     is_paused_upon_creation=False
 ) as dag:
